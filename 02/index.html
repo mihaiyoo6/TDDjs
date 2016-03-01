@@ -15,6 +15,8 @@
 
 		YUI().use('test-console', 'test', function(Y) {
 			//... all tests go here....
+			var suite = new Y.Test.Suite('Test-suite1');
+
 			var testCase = new Y.Test.Case({
 				setUp(){
 					this.expectedResult = 1.59;
@@ -32,21 +34,22 @@
 					Y.Assert.areEqual(exprectedResult, actualResult, '100 INR should be equal to $1.59');
 				}
 			});
-		//this will rende a test console in the browser
-		// in the container (div here) with id testLogs.
-		new Y.Test.Console({
-			filters: {
-				pass: true,
-				fail: true
-			},
-			newestOnTop: false,
-		}).render('#test-Logs');
+			//this will rende a test console in the browser
+			// in the container (div here) with id testLogs.
+			new Y.Test.Console({
+				filters: {
+					pass: true,
+					fail: true
+				},
+				newestOnTop: false,
+			}).render('#test-Logs');
 
-		Y.Test.Runner.add(testCase);
-		//run the tests
-		Y.Test.Runner.run();
-		})
-		;
+			suite.add(testCase);
+
+			Y.Test.Runner.add(suite);
+			//run the tests
+			Y.Test.Runner.run();
+		});
 	</script>
 </head>
 <body class="yui3-skin-sam">

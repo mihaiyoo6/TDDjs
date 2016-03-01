@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chapter - 1</title>
+	<link rel="stylesheet" type="text/css"
+		  href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css">
+	<script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+	<script>
+
+		YUI().use('test-console', 'node-event-simulate', function(Y) {
+			//... all tests go here....
+
+			var controller = {
+				handleClick: function(event){
+					new Y.Test.Console({
+						filters: {
+							fail: true,
+							pass: true,
+							status: true
+						},
+						newestOnTop: false,
+					}).render('#testLogs');
+
+					event.target.addClass("clicked");
+				}
+			};
+			var testCase = new Y.Test.Case({
+				name: 'Show log console on click',
+				setUp: function(){
+					Y.one('.showLog').on('click', controller.handleClick);
+				},
+				tearDown: function(){
+					Y.one('.showLog').detachAll();
+				},
+				'handleClick() should show the log console on "clicked" and add tha class to the button' : function(){
+					var button = Y.one('.showLog');
+					//Generating Click event
+					button.simulate('click');
+					Y.Assert.isTrue(button.hasClass('clicked'), 'Button should show the log console "clicked" and have a class of clicked')
+				}
+			});
+
+			Y.Test.Runner.add(testCase);
+			Y.Test.Runner.run();
+
+		});
+	</script>
+</head>
+<body class="yui3-skin-sam">
+<div id="testLogs">
+
+</div>
+<input type="button" class="showLog" value="Show Test log" name="show-log">
+</body>
+</html>
