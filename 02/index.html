@@ -3,43 +3,55 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Chapter - 1</title>
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css">
+	<link rel="stylesheet" type="text/css"
+		  href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css">
 	<script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
 	<script>
-		function convertCurrency( amount, rateOfConversion ) {
+		'use strict';
+		function convertCurrency (amount, rateOfConversion) {
 			//bussiness to convert currency
 			return parseFloat(amount * rateOfConversion).toFixed(2);
 		}
 
-		YUI().use('test-console', function(Y) {
+		YUI().use('test-console', 'test', function(Y) {
 			//... all tests go here....
 			var testCase = new Y.Test.Case({
-				testCurrencyConversion: function() {
+				setUp(){
+					this.expectedResult = 1.59;
+				},
+				tearDown(){
+					delete this.expectedResult;
+				},
+				testData(){
+					Y.Assert.areEqual(this.exprectedResult, this.actualResult, '100 INR should be equal to $1.59');
+				},
+				testCurrencyConversion() {
 					var exprectedResult = 1.59;
-					var actualResult = convertCurrency(100, 1/63);
+					var actualResult = convertCurrency(100, 1 / 63);
 
 					Y.Assert.areEqual(exprectedResult, actualResult, '100 INR should be equal to $1.59');
 				}
 			});
-			//this will rende a test console in the browser
-			// in the container (div here) with id testLogs.
-			new Y.Test.Console({
-				filters: {
-					pass: true,
-					fail: true
-				},
-				newestOnTop: false,
-			}).render('#test-Logs');
+		//this will rende a test console in the browser
+		// in the container (div here) with id testLogs.
+		new Y.Test.Console({
+			filters: {
+				pass: true,
+				fail: true
+			},
+			newestOnTop: false,
+		}).render('#test-Logs');
 
-			Y.Test.Runner.add(testCase);
-			//run the tests
-			Y.Test.Runner.run();
-		});
+		Y.Test.Runner.add(testCase);
+		//run the tests
+		Y.Test.Runner.run();
+		})
+		;
 	</script>
 </head>
 <body class="yui3-skin-sam">
-	<div id="testLogs">
+<div id="testLogs">
 
-	</div>
+</div>
 </body>
 </html>
