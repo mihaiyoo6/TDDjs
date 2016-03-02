@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JSUnit - master page</title>
+	<script src="app/jsUnitCore.js"><</script>
+	<script>
+		function testConvertCurrency (amount, rateOfConversion) {
+			//bussiness to convert currency
+			return parseFloat(amount * rateOfConversion).toFixed(2);
+		}
+		function testData () {
+			assertEquals("Assert passed", '1.59', testConvertCurrency(100, 1 / 63));
+		}
+		function testData1 () {
+			assertNotEquals("Assert Failed", '2.1', testConvertCurrency(100, 1 / 63));
+		}
+
+	</script>
+</head>
+<body>
+	<h1>JsUnit Currency Conversion Tests</h1>
+
+	<p>This page contains tests for the JsUnit currency conversion. To see them, take a look at the source.</p>
+</body>
+</html>
