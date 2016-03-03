@@ -2,6 +2,7 @@
 ### Example user template
 
 # IntelliJ project files
+/03/karma-jasmine/node_modules
 .idea
 /code
 *.iml
