@@ -129,7 +129,7 @@ describe('custom spy object', function(){
 describe('Jasmine clock', function(){
 	var employee;
 	beforeEach(function(){
-		employee = new Employee('Alice', 5, 'Testeing');
+		employee = new Employee('Alice', 5, 'Testing');
 		employee.checkAvailability = jasmine.createSpy();
 		jasmine.clock().install();
 	});
@@ -165,4 +165,97 @@ describe('Jasmine clock', function(){
 		expect(employee.checkAvailability.calls.count()).toEqual(3);
 	});
 
+});
+
+describe('Custom Matchers', function(){
+	var customMatchers = {
+		toBePresent: function( util, customEqualityTesters){
+			return {
+				compare: function(employee){
+					var statusCode = employee.getAttendance();
+					var result = {};
+					result.pass = util.equals( statusCode, 1, customEqualityTesters);
+					if(result.pass){
+						result.message = 'Employee '+employee.getName() +' is present today';
+					}else{
+						result.message = "Eployee "+ employee.getName() + 'is absent today';
+					}
+					return result;
+				}
+			}
+		}
+	};
+	beforeEach(function(){
+		jasmine.addMatchers(customMatchers);
+	});
+
+	it('Expected employee to be present', function(){
+		var alice = new Employee('Alice', 5, 'Testing');
+		alice.markAttendance(1);
+		console.log(alice);
+		expect(alice).toBePresent();
+	});
+});
+
+describe('Checking custom Employee equality tests', function(){
+	var customEqualityTester = function(employee1, employee2){
+		if( typeof employee1 !== typeof employee2){
+			return false;
+		}
+
+		return (employee1.getEmail() === employee2.getEmail()) && (employee1.getName() === employee2.getName());
+	}
+	var employeeA, employeeB;
+	beforeEach(function(){
+		jasmine.addCustomEqualityTester(customEqualityTester);
+		employeeA = new Employee('Alice', 5, 'Testing');
+		employeeA.setEmail('alice@example.com');
+		employeeB = new Employee('Alice', 4, 'Testing');
+		employeeB.setEmail('alice@example.com');
+	});
+
+	it('should be equal', function(){
+		expect(employeeA).toEqual(employeeB);
+	});
+
+	it('should not be equal', function(){
+		var employeeC = new Employee('Bob', 3, 'Testing');
+		employeeC.setEmail('bob@example.com');
+		expect(employeeA).not.toEqual(employeeC);
+	});
+});
+
+describe('Using mock-ajax for Asynchronous operations testing', function(){
+
+	beforeEach(function(){
+		jasmine.Ajax.install();
+	});
+
+	afterEach(function(){
+		jasmine.Ajax.uninstall();
+	});
+
+	it('Checking weather report Ajax API', function(){
+		var successFunction = jasmine.createSpy("success");
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(args) {
+			if (this.readyState == this.DONE) {
+				successFunction(this.responseText);
+			}
+		};
+
+		xhr.open("GET", "/get/weather/IN-Mumbai");
+		xhr.send();
+		console.log(jasmine.Ajax.requests.mostRecent().url);
+
+		expect(jasmine.Ajax.requests.mostRecent().url).toBe('/get/weather/IN-Mumbai');
+		expect(successFunction).not.toHaveBeenCalled();
+		jasmine.Ajax.requests.mostRecent().respondWith({
+			'status': 200,
+			'contentType': 'text/plain',
+			'responseText': 'Temp 25 C, Sunlight'
+		});
+
+		expect(successFunction).toHaveBeenCalledWith('Temp 25 C, Sunlight');
+	});
 });

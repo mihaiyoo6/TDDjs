@@ -36,3 +36,19 @@ Employee.prototype.getDetails = function () {
 		'\nGrade: ' + this.getGrade() +
 		'\nSalary: ' + this.getSalary();
 };
+
+Employee.prototype.markAttendance = function(status){
+	this.attendanceStatus = status;
+};
+
+Employee.prototype.getAttendance = function(){
+	return this.attendanceStatus;
+};
+
+Employee.prototype.setEmail = function(email){
+	this.email = email;
+};
+
+Employee.prototype.getEmail = function(){
+	return this.email;
+};
